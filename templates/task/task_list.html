@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>
+    Worker List
+      Create
+  </h1>
+
+  <br>
+  {% if task_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Priority</th>
+        <th>Is completed?</th>
+      </tr>
+      {% for task in task_list %}
+        <tr>
+          <td>{{ task.id }}</td>
+          <td><a href="#">{{ task.name }}</a>
+          </td>
+          <td>{{ task.deadline }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.is_completed }}</td>
+        </tr>
+      {% endfor %}
+
+    </table>
+  {% else %}
+    <p>There are no tasks.</p>
+  {% endif %}
+{% endblock %}
