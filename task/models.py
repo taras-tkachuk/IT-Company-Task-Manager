@@ -62,9 +62,10 @@ class Task(models.Model):
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name="tasks"
+        related_name="tasks",
+        blank=True
     )
-    tags = models.ManyToManyField(Tag, related_name="tasks")
+    tags = models.ManyToManyField(Tag, related_name="tasks", blank=True)
 
     def __str__(self) -> str:
         return f"{self.name}, deadline: {self.deadline}"
