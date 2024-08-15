@@ -33,7 +33,7 @@ class Worker(AbstractUser):
     )
 
     def __str__(self) -> str:
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        return f"{self.username} - {self.last_name}"
 
 
 class Tag(models.Model):
