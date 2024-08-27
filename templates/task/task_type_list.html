@@ -3,16 +3,23 @@
 {% block content %}
   <h1>
     Task Type list
+    <a class="btn btn-info" style="float: right;" href="{% url 'task:task-type-create' %}">Create task type</a>
   </h1>
   <br>
   {% if task_type_list %}
-    <ul>
+    <table class="table">
       {% for task_type in task_type_list %}
-        <li>
-          {{ task_type.name }}
-        </li>
+        <tr>
+          <td>{{ task_type.name }}</td>
+          <td>
+            <a href="{% url 'task:task-type-update' pk=task_type.id %}">UPDATE</a>
+          </td>
+          <td>
+            <a href="{% url 'task:task-type-delete' pk=task_type.id %}">DELETE</a>
+          </td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
     <p>There are no type tasks</p>
   {% endif %}
