@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 from task_manager import settings
 
@@ -35,6 +36,9 @@ class Worker(AbstractUser):
     def __str__(self) -> str:
         return f"{self.username} - {self.last_name}"
 
+    def get_absolute_url(self) -> object:
+        return reverse("task:worker-detail", kwargs={"pk": self.pk})
+
 
 class Tag(models.Model):
     name = models.CharField(
@@ -69,3 +73,6 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}, deadline: {self.deadline}"
+
+    def get_absolute_url(self) -> object:
+        return reverse("task:task-detail", kwargs={"pk": self.pk})

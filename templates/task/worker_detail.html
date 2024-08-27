@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Worker:</h1>
+  <div class="ml-3">
+    <p><strong>Full name:</strong> {{ worker.last_name }} {{ worker.first_name }}</p>
+    <p><strong>Position:</strong> {{ worker.position }}</p>
+  </div>
+  <h3>Tasks:</h3>
+  <div class="ml-3">
+    {% for task in worker.tasks.all %}
+      <hr>
+      <p><strong>{{ task.name }}</strong></p>
+    {% empty %}
+      <p>No tasks!</p>
+    {% endfor %}
+  </div>
+{% endblock %}

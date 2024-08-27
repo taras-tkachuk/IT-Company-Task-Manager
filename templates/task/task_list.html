@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>
-    Worker List
-      Create
+    Task List
   </h1>
 
   <br>
@@ -18,7 +17,7 @@
       {% for task in task_list %}
         <tr>
           <td>{{ task.id }}</td>
-          <td><a href="#">{{ task.name }}</a>
+          <td><a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
           </td>
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>

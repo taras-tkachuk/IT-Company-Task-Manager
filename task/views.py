@@ -20,13 +20,29 @@ def index(request: HttpRequest) -> HttpResponse:
 
 class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
+    paginate_by = 5
+    queryset = Worker.objects.all().order_by("username")
 
 
-class TaskListView(LoginRequiredMixin,generic.ListView):
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Worker
+    queryset = Worker.objects.select_related("position")
+
+
+class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
+    paginate_by = 5
+    queryset = Task.objects.all().order_by("deadline")
+
+
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
+    queryset = Task.objects.prefetch_related("assignees__position")
 
 
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     model = TaskType
     template_name = "task/task_type_list.html"
     context_object_name = "task_type_list"
+    queryset = TaskType.objects.all().order_by("name")
+

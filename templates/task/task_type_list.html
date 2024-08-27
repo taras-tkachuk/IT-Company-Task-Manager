@@ -3,14 +3,12 @@
 {% block content %}
   <h1>
     Task Type list
-      Create
   </h1>
   <br>
   {% if task_type_list %}
     <ul>
       {% for task_type in task_type_list %}
         <li>
-          <a href="#">{{ task_type.id }}</a>
           {{ task_type.name }}
         </li>
       {% endfor %}
