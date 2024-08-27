@@ -41,6 +41,26 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Task.objects.prefetch_related("assignees__position")
 
 
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("task:task-list")
+    template_name = "task/task_form.html"
+
+
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("task:task-list")
+    template_name = "task/task_form.html"
+
+
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("task:task-list")
+    template_name = "task/task_confirm_delete.html"
+
+
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     model = TaskType
     template_name = "task/task_type_list.html"

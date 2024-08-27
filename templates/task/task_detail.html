@@ -23,4 +23,6 @@
       <p>No tags!</p>
     {% endfor %}
   </div>
+  <a class="btn btn-primary btn-lg" role="button" href="{% url 'task:task-update' task.id %}">Update</a>
+  <a class="btn btn-danger btn-lg" role="button" href="{% url 'task:task-delete' task.id %}">Delete</a>
 {% endblock %}
