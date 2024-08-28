@@ -47,6 +47,23 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
     queryset = Worker.objects.select_related("position")
 
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        worker = self.object
+
+        completed_tasks = Task.objects.filter(
+            assignees=worker,
+            is_completed=True
+        )
+        not_completed_tasks = Task.objects.filter(
+            assignees=worker,
+            is_completed=False
+        )
+
+        context["completed_tasks"] = completed_tasks
+        context["not_completed_tasks"] = not_completed_tasks
+        return context
+
 
 class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Worker

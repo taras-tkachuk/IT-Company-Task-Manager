@@ -27,7 +27,7 @@
     </form>
     {% for assignee in task.assignees.all %}
       <hr>
-      <p class="text-muted">{{ assignee.last_name }} - {{ assignee.position }}</p>
+      <p class="text-muted"><a href="{{ assignee.get_absolute_url }}">{{ assignee.last_name }}</a> - {{ assignee.position }}</p>
     {% empty %}
       <p>No assignees!</p>
     {% endfor %}

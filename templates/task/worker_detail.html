@@ -6,14 +6,28 @@
     <p><strong>Full name:</strong> {{ worker.last_name }} {{ worker.first_name }}</p>
     <p><strong>Position:</strong> {{ worker.position }}</p>
   </div>
-  <h3>Tasks:</h3>
   <div class="ml-3">
-    {% for task in worker.tasks.all %}
-      <hr>
-      <p><strong>{{ task.name }}</strong></p>
-    {% empty %}
-      <p>No tasks!</p>
-    {% endfor %}
+    <h2>Completed Tasks</h2>
+    <ul>
+      {% if completed_tasks %}
+        {% for task in completed_tasks %}
+          <li><a href="{{ task.get_absolute_url }}">{{ task.name }}</a></li>
+        {% endfor %}
+      {% else %}
+        <li>No completed tasks.</li>
+      {% endif %}
+    </ul>
+
+    <h2>Not Completed Tasks</h2>
+    <ul>
+      {% if not_completed_tasks %}
+        {% for task in not_completed_tasks %}
+          <li><a href="{{ task.get_absolute_url }}">{{ task.name }}</a></li>
+        {% endfor %}
+      {% else %}
+        <li>No not completed tasks.</li>
+      {% endif %}
+    </ul>
   </div>
   <a class="btn btn-primary btn-lg" role="button" href="{% url 'task:worker-update' worker.id %}">Update</a>
   <a class="btn btn-danger btn-lg" role="button" href="{% url 'task:worker-delete' worker.id %}">Delete</a>
