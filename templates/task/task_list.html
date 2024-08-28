@@ -17,6 +17,7 @@
         <th>Deadline</th>
         <th>Priority</th>
         <th>Is completed?</th>
+        <th>Tag</th>
       </tr>
       {% for task in task_list %}
         <tr>
@@ -26,6 +27,13 @@
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>
           <td>{{ task.is_completed }}</td>
+          <td>
+            {% for tag in task.tags.all %}
+              <p>{{ tag }}</p>
+            {% empty %}
+              <p>No tag</p>
+            {% endfor %}
+          </td>
         </tr>
       {% endfor %}
 

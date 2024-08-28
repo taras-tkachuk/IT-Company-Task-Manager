@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from task.forms import (WorkerForm, TaskForm, TaskNameSearchForm,
+from task.forms import (WorkerForm, TaskForm, TaskTagSearchForm,
                         WorkerUsernameSearchForm)
 from task.models import Worker, Task, TaskType
 
@@ -24,13 +24,13 @@ def index(request: HttpRequest) -> HttpResponse:
 class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     paginate_by = 5
-    queryset = Worker.objects.all().order_by("username")
+    queryset = Worker.objects.select_related("position").order_by("username")
 
     def get_queryset(self):
         form = WorkerUsernameSearchForm(self.request.GET)
 
         if form.is_valid():
-            return Worker.objects.filter(
+            return self.queryset.filter(
                 username__icontains=form.cleaned_data["username"]
             )
 
@@ -66,21 +66,22 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 5
-    queryset = Task.objects.all().order_by("deadline")
+    queryset = (Task.objects.prefetch_related("tags")
+                .distinct().order_by("deadline"))
 
     def get_queryset(self):
-        form = TaskNameSearchForm(self.request.GET)
+        form = TaskTagSearchForm(self.request.GET)
 
         if form.is_valid():
-            return Task.objects.filter(
-                name__icontains=form.cleaned_data["name"]
+            return self.queryset.filter(
+                tags__name__icontains=form.cleaned_data["tag"]
             )
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(TaskListView, self).get_context_data(**kwargs)
-        name = self.request.GET.get("name", "")
-        context["search_form"] = TaskNameSearchForm(
-            initial={"name": name}
+        tag = self.request.GET.get("tag", "")
+        context["search_form"] = TaskTagSearchForm(
+            initial={"tag": tag}
         )
         return context
 
@@ -95,10 +96,8 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
             task.assignees.add(self.request.user)
         elif "remove" in request.POST:
             task.assignees.remove(self.request.user)
-        elif "task_not_done" in request.POST:
-            task.is_completed = False
-        elif "task_done" in request.POST:
-            task.is_completed = True
+        elif "task_not_done" in request.POST or "task_done" in request.POST:
+            task.is_completed = not task.is_completed
         task.save()
         return HttpResponseRedirect(
             reverse_lazy(

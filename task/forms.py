@@ -16,6 +16,12 @@ class WorkerForm(UserCreationForm):
 
 
 class TaskForm(forms.ModelForm):
+    deadline = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={"type": "datetime-local"}
+        ),
+        required=True
+    )
     assignees = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -32,14 +38,14 @@ class TaskForm(forms.ModelForm):
         fields = "__all__"
 
 
-class TaskNameSearchForm(forms.Form):
-    name = forms.CharField(
+class TaskTagSearchForm(forms.Form):
+    tag = forms.CharField(
         max_length=99,
         required=False,
         label="",
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Search by name"
+                "placeholder": "Search by tag"
             }
         )
     )
