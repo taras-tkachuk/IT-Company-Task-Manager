@@ -49,7 +49,6 @@ class TestsForPrivateRequired(TestCase):
             list(Worker.objects.all())
         )
 
-
     def test_task_list_view(self):
         response = self.client.get(TASK_LIST)
         self.assertEqual(response.status_code, 200)
