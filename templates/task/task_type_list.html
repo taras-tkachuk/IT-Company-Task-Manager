@@ -12,9 +12,6 @@
         <tr>
           <td>{{ task_type.name }}</td>
           <td>
-            <a href="{% url 'task:task-type-update' pk=task_type.id %}">UPDATE</a>
-          </td>
-          <td>
             <a href="{% url 'task:task-type-delete' pk=task_type.id %}">DELETE</a>
           </td>
         </tr>
