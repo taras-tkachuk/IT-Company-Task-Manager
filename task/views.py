@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from task.forms import WorkerForm, TaskForm
+from task.forms import (WorkerForm, TaskForm, TaskNameSearchForm,
+                        WorkerUsernameSearchForm)
 from task.models import Worker, Task, TaskType
 
 
@@ -24,6 +25,22 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     paginate_by = 5
     queryset = Worker.objects.all().order_by("username")
+
+    def get_queryset(self):
+        form = WorkerUsernameSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return Worker.objects.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerUsernameSearchForm(
+            initial={"username": username}
+        )
+        return context
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
@@ -50,6 +67,22 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 5
     queryset = Task.objects.all().order_by("deadline")
+
+    def get_queryset(self):
+        form = TaskNameSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return Task.objects.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super(TaskListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskNameSearchForm(
+            initial={"name": name}
+        )
+        return context
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):

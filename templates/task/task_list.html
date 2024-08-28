@@ -4,7 +4,10 @@
     Task List
     <a class="btn btn-info" style="float: right;" href="{% url 'task:task-create' %}">Create task</a>
   </h1>
-
+  <form action="" method="get">
+    {{ search_form }}
+    <input type="submit" class="btn btn-secondary">
+  </form>
   <br>
   {% if task_list %}
     <table class="table">

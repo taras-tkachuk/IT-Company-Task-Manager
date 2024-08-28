@@ -4,7 +4,10 @@
     Worker List
     <a class="btn btn-info" style="float: right;" href="{% url 'task:worker-create' %}">Create worker</a>
   </h1>
-
+  <form action="" method="get">
+    {{ search_form }}
+    <input type="submit" class="btn btn-secondary">
+  </form>
   <br>
   {% if worker_list %}
     <table class="table">
