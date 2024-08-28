@@ -95,6 +95,10 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
             task.assignees.add(self.request.user)
         elif "remove" in request.POST:
             task.assignees.remove(self.request.user)
+        elif "task_not_done" in request.POST:
+            task.is_completed = False
+        elif "task_done" in request.POST:
+            task.is_completed = True
         task.save()
         return HttpResponseRedirect(
             reverse_lazy(
