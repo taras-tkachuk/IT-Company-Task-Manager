@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -55,6 +55,20 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
     queryset = Task.objects.prefetch_related("assignees__position")
+
+    def post(self, request, *args, **kwargs) -> HttpResponseRedirect:
+        task = self.get_object()
+        if "assign" in request.POST:
+            task.assignees.add(self.request.user)
+        elif "remove" in request.POST:
+            task.assignees.remove(self.request.user)
+        task.save()
+        return HttpResponseRedirect(
+            reverse_lazy(
+                "task:task-detail",
+                kwargs={"pk": task.id}
+            )
+        )
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):

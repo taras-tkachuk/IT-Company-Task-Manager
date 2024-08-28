@@ -9,6 +9,14 @@
     <p>Is completed: {{ task.is_completed }}</p>
     <p>Task type: {{ task.task_type }}</p>
     <h4>Assignees:</h4>
+    <form action="" method="post">
+      {% csrf_token %}
+      {% if request.user in task.assignees.all %}
+        <button type="submit" name="remove" class="btn btn-danger">Delete me from this task</button>
+      {% else %}
+        <button type="submit" name="assign" class="btn btn-success">Assign me to this task</button>
+      {% endif %}
+    </form>
     {% for assignee in task.assignees.all %}
       <hr>
       <p class="text-muted">{{ assignee.last_name }} - {{ assignee.position }}</p>
