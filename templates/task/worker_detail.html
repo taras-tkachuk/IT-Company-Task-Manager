@@ -15,4 +15,6 @@
       <p>No tasks!</p>
     {% endfor %}
   </div>
+  <a class="btn btn-primary btn-lg" role="button" href="{% url 'task:worker-update' worker.id %}">Update</a>
+  <a class="btn btn-danger btn-lg" role="button" href="{% url 'task:worker-delete' worker.id %}">Delete</a>
 {% endblock %}

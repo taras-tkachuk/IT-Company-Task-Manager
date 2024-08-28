@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from task.forms import WorkerForm, TaskForm
 from task.models import Worker, Task, TaskType
 
 
@@ -30,6 +31,21 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Worker.objects.select_related("position")
 
 
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Worker
+    form_class = WorkerForm
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerForm
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    success_url = reverse_lazy("task:worker-list")
+
+
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     paginate_by = 5
@@ -43,22 +59,17 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
-    fields = "__all__"
-    success_url = reverse_lazy("task:task-list")
-    template_name = "task/task_form.html"
+    form_class = TaskForm
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
-    fields = "__all__"
-    success_url = reverse_lazy("task:task-list")
-    template_name = "task/task_form.html"
+    form_class = TaskForm
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("task:task-list")
-    template_name = "task/task_confirm_delete.html"
 
 
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
