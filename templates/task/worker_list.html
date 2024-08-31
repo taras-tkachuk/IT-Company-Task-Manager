@@ -1,34 +1,57 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% load crispy_forms_filters %}
 {% block content %}
-  <h1>
-    Worker List
-    <a class="btn btn-info" style="float: right;" href="{% url 'task:worker-create' %}">Create worker</a>
-  </h1>
-  <form action="" method="get">
-    {{ search_form }}
-    <input type="submit" class="btn btn-secondary">
-  </form>
-  <br>
-  {% if worker_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Last name</th>
-        <th>Position</th>
-      </tr>
-      {% for worker in worker_list %}
-        <tr>
-          <td>{{ worker.id }}</td>
-          <td>
-            <a href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a>
-          </td>
-          <td>{{ worker.last_name }}</td>
-          <td>{{ worker.position }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <p>There are no workers.</p>
-  {% endif %}
+  <section class="mt-xxl-8" id="count-stats">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 z-index-5 border-radius-xl mx-auto blur shadow-blur">
+          <div class="row mb-2 justify-content-center">
+            <form method="get" action="" class="form-inline">
+              <div class="input-group justify-content-xl-center">
+                {{ search_form|crispy }}
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-secondary" id="search-btn">
+                    🔍
+                  </button>
+                </div>
+                <a class="justify-content-xl-end btn btn-primary" href="{% url 'task:worker-create' %}">
+                  Create worker
+                </a>
+              </div>
+            </form>
+            <div class="row">
+              {% if worker_list %}
+                <table class="table">
+                  <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Last name</th>
+                    <th>Position</th>
+                  </tr>
+                  {% for worker in worker_list %}
+                    <tr>
+                      <td>
+                        {{ worker.id }}
+                      </td>
+                      <td>
+                        <a href="{% url 'task:worker-detail' worker.id %}">
+                          {{ worker.username }}
+                        </a>
+                      </td>
+                      <td>{{ worker.last_name }}</td>
+                      <td>{{ worker.position }}</td>
+                    </tr>
+                  {% endfor %}
+                </table>
+              {% else %}
+                <h1 class="row justify-content-center">There aren't any workers</h1>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

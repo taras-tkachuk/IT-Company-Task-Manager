@@ -1,44 +1,58 @@
-{% extends "base.html" %}
-
+{% extends "layouts/base.html" %}
 {% block content %}
-  <h1>Task: {{ task.name }}</h1>
-  <form action="" method="post">
-      {% csrf_token %}
-      {% if task.is_completed %}
-        <button type="submit" name="task_not_done" class="btn btn-secondary">Change status</button>
-      {% else %}
-        <button type="submit" name="task_done" class="btn btn-secondary">Change status</button>
-      {% endif %}
-    </form>
-  <div class="ml-3">
-    <h3>Detail:</h3>
-    <p>Description: {{ task.description }}</p>
-    <p>Deadline: {{ task.deadline }}</p>
-    <p>Is completed: {{ task.is_completed }}</p>
-    <p>Task type: {{ task.task_type }}</p>
-    <h4>Assignees:</h4>
-    <form action="" method="post">
-      {% csrf_token %}
-      {% if request.user in task.assignees.all %}
-        <button type="submit" name="remove" class="btn btn-danger">Delete me from this task</button>
-      {% else %}
-        <button type="submit" name="assign" class="btn btn-success">Assign me to this task</button>
-      {% endif %}
-    </form>
-    {% for assignee in task.assignees.all %}
-      <hr>
-      <p class="text-muted"><a href="{{ assignee.get_absolute_url }}">{{ assignee.last_name }}</a> - {{ assignee.position }}</p>
-    {% empty %}
-      <p>No assignees!</p>
-    {% endfor %}
-    <h4>Tags:</h4>
-    {% for tag in task.tags.all %}
-      <hr>
-      <p class="text-muted">{{ tag.name }}</p>
-    {% empty %}
-      <p>No tags!</p>
-    {% endfor %}
+  <div class="col-lg-7 text-center mt-xxl-8 mx-auto">
+    <h1 class="pt-3 mt-n5">
+      {{ task.name }}
+      <a href="{% url 'task:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
+        Delete
+      </a>
+      <a href="{% url 'task:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">
+        Update
+      </a>
+    </h1>
   </div>
-  <a class="btn btn-primary btn-lg" role="button" href="{% url 'task:task-update' task.id %}">Update</a>
-  <a class="btn btn-danger btn-lg" role="button" href="{% url 'task:task-delete' task.id %}">Delete</a>
+  <section class="pt-3 pb-4" id="count-stats">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="row col-lg-5 z-index-5 border-radius-xl mx-auto py-3 blur shadow-blur">
+          <form action="" method="post">
+            {% csrf_token %}
+            {% if request.user in task.assignees.all %}
+              <button type="submit" name="remove" class="btn btn-danger">Delete me from this task</button>
+            {% else %}
+              <button type="submit" name="assign" class="btn btn-success">Assign me to this task</button>
+            {% endif %}
+          </form>
+          <form action="" method="post">
+            {% csrf_token %}
+            {% if task.is_completed %}
+              <button type="submit" name="task_not_done" class="btn btn-info">Change status</button>
+            {% else %}
+              <button type="submit" name="task_done" class="btn btn-info">Change status</button>
+            {% endif %}
+          </form>
+          <p>Description: {{ task.description }}</p>
+          <p>Deadline: {{ task.deadline }}</p>
+          <p>Is completed: {{ task.is_completed }}</p>
+          <p>Task type: {{ task.task_type }}</p>
+          {% if task.assignees.all %}
+            <h5>Worker{{ task.assignees.all|pluralize }}</h5>
+            {% for worker in task.assignees.all %}
+              <p><a href="{{ worker.get_absolute_url }}">{{ worker.username }}</a> - {{ worker.position }}</p>
+            {% endfor %}
+          {% else %}
+            <h1 class="justify-content-xl-center">There aren't any workers</h1>
+          {% endif %}
+          {% if task.tags.all %}
+            <h5>Tag{{ task.tags.all|pluralize }}</h5>
+            {% for tag in task.tags.all %}
+              <p>{{ tag }}</p>
+            {% endfor %}
+          {% else %}
+            <h1 class="justify-content-xl-center">There aren't any tags</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

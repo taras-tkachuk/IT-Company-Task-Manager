@@ -9,12 +9,6 @@
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-disabled="true" tabindex="-1">
-            <span aria-hidden="true">&laquo;</span>
-          </span>
-        </li>
       {% endif %}
 
       {% if page_obj.has_next %}
@@ -22,12 +16,6 @@
           <a href="?{% query_transform request page=page_obj.next_page_number %}" class="page-link" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-disabled="true" tabindex="-1">
-            <span aria-hidden="true">&raquo;</span>
-          </span>
         </li>
       {% endif %}
     </ul>
