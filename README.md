@@ -8,7 +8,7 @@
 
 Information about deployment.
 
-You can view the deployed project [here](#).
+You can view the deployed project [here](https://task-manager-yj43.onrender.com)
 
 ## Test user:
 
