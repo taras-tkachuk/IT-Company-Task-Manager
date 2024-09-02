@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+  <section class="mt-xxl-8" id="count-stats">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 z-index-5 border-radius-xl mx-auto py-3 blur shadow-blur">
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="text-center">
+              <p>Are you sure you want to delete the task: {{ task.name }}?</p>
+              <input type="submit" value="Yes, delete" class="btn btn-danger">
+              <a href="{% url 'task:task-detail' pk=task.id %}" class="btn btn-primary">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
