@@ -6,7 +6,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-5 z-index-5 border-radius-xl mx-auto py-3 blur shadow-blur">
-          <h1 class="row justify-content-center">Create task type</h1>
+          <h1 class="row justify-content-center">{{ object|yesno:"Update,Create"}} task type</h1>
           <form action="" method="post" novalidate>
             {% csrf_token %}
             {{ form|crispy }}

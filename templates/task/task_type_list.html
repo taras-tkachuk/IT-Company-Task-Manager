@@ -16,17 +16,19 @@
               <tr>
                 <th>Task Type</th>
                 <th>Update</th>
+                <th>Delete</th>
               </tr>
               {% for tasktype in task_type_list %}
                 <tr>
                   <td>{{ tasktype.name }}</td>
+                  <td><a href="{% url 'task:task-type-update' pk=tasktype.id %}" class="btn btn-secondary">Update</a>
                   <td><a href="{% url 'task:task-type-delete' pk=tasktype.id %}" class="btn btn-danger">Delete</a>
                   </td>
                 </tr>
               {% endfor %}
             </table>
           {% else %}
-            <h1 class="row justify-content-center">There aren't any types</h1>
+            <h1 class="row justify-content-center">There aren't any task types</h1>
           {% endif %}
         </div>
       </div>
